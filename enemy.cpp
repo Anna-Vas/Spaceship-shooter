@@ -6,9 +6,12 @@ Enemy::Enemy(int w, int h)
     point.setY(10);
 }
 
-void Enemy::move(int w, int h)
+bool Enemy::move(int h)
 {
     point+=QPoint(0,speed);
+    if(point.y()+r>=h)
+        return false;
+    return true;
 }
 
 Bullet Enemy::shoot()

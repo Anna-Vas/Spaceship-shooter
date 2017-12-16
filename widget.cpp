@@ -11,7 +11,11 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     player = new Player(width(),height());
-
+    Boss = new boss(width(), height());
+    boss_lives = 20;
+    boss_exist = true;
+    timerer.start(1000);
+    connect(&timerer,SIGNAL(timeout()),this,SLOT(moverect()));
     timer.start(30);
     connect(&timer,SIGNAL(timeout()),this,SLOT(MoveAll()));
 }
@@ -29,6 +33,13 @@ void Widget::paintEvent(QPaintEvent *e)
     player->draw(painter);
     for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
         eiter->draw(painter);
+    if(boss_exist)
+    {
+        Boss->draw(painter);
+            Boss->attack_1(painter);
+            s = false;
+
+    }
     if(shooted)
     {
         if(!bullets.empty())
@@ -102,6 +113,11 @@ void Widget::stageBoss()
         enemies.push_back(EnemyType1(width(), height()));
         is_enemy = true;
     }
+}
+
+bool Widget::moverect()
+{
+    bool s = true;
 }
 
 
@@ -226,7 +242,30 @@ void Widget::MoveAll()
            //qDebug()<<!eiter->move(height());
    }
    }
+  if(boss_exist)
+   {
+       for(iter = bullets.begin(); iter != bullets.end(); iter++)
+       {
+           if(iter->getLast() == 1){
+               int b = iter->getPoint().y();
+               if(b <= 100)
+               {
+                   iter = bullets.erase(iter);
+                   boss_lives--;
+                   qDebug()<<"bb";
+                   break;
+               }
+           }
+           if(boss_lives <= 0)
+           {
+               qDebug()<<"aa";
+               boss_exist = false;
+               delete Boss;
+               break;
+           }
+       }
 
+   }
   // qDebug()<<shooted;
     this->repaint();
 }

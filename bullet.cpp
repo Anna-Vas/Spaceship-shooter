@@ -23,6 +23,7 @@ bool Bullet::move(int w, int h)
             point -= QPoint(0,v);
             break;
         case 2:
+            v = 5;
             point += QPoint(0,v);
             break;
         default:

@@ -28,11 +28,12 @@ bool Bullet::move(int w, int h)
         default:
             break;
     }
-    if(point.x()+r>=w)
+    if(point.y()-r<=0)
     {
+    //    qDebug()<<point.y();
         return false;
     }
-    if(point.x()-r<=0)
+    if(point.y()+r>=h)
     {
          return false;
     }

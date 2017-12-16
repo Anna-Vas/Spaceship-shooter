@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <bullet.h>
+#include <boss.h>
 #include <enemy.h>
 #include <enemytype1.h>
 
@@ -17,6 +18,7 @@ class Widget : public QWidget
 {
     Q_OBJECT
     Player *player;
+    boss *Boss;
     QList <Bullet> bullets;
     QList <Bullet>::iterator iter;
     QList <Bullet> rbullets;
@@ -36,17 +38,21 @@ public:
 
 public slots:
     void MoveAll();
-
+    bool moverect();
 private:
     bool is_enemy = false;
     Ui::Widget *ui;
     QTimer timer;
+    QTimer timerer;
     QTimer pause;
     bool shooted = false;
     bool rshooted = false;
     bool asd = false;
     int stage = 1;
-
+    bool boss_exist = false;
+    int boss_lives = 20;
+protected:
+    bool s = true;
 };
 
 #endif // WIDGET_H

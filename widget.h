@@ -19,6 +19,8 @@ class Widget : public QWidget
     Player *player;
     QList <Bullet> bullets;
     QList <Bullet>::iterator iter;
+    QList <Bullet> rbullets;
+    QList <Bullet>::iterator riter;
     QList <EnemyType1> enemies;
     QList <EnemyType1>::iterator eiter;
 public:
@@ -26,6 +28,11 @@ public:
     ~Widget();
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *k);
+    void stage1();
+    void stage2();
+    void stage3();
+    void stage4();
+    void stageBoss();
 
 public slots:
     void MoveAll();
@@ -34,8 +41,11 @@ private:
     bool is_enemy = false;
     Ui::Widget *ui;
     QTimer timer;
+    QTimer pause;
     bool shooted = false;
+    bool rshooted = false;
     bool asd = false;
+    int stage = 1;
 
 };
 

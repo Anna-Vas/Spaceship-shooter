@@ -71,6 +71,38 @@ void Widget::MoveAll()
         }
 
     }
+   if(is_enemy){
+       if(shooted){
+
+   for(iter = bullets.begin(); iter != bullets.end(); iter++)
+   {
+       for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
+       {
+           if(iter->getLast()==1)
+           {
+               int a = iter->getPoint().x();
+               int b = iter->getPoint().y();
+               int c = eiter->getPoint().x();
+               int d = eiter->getPoint().y();
+             //  qDebug()<<a<<b<<c<<d;
+               if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35)) {
+                   eiter = enemies.erase(eiter);
+                   if(enemies.empty()) {
+                       is_enemy = false;
+                   }
+               //    qDebug()<<"a";
+                   iter = bullets.erase(iter);
+                   if(bullets.empty()) shooted = false;
+                   asd = true;
+                   break;
+               }
+
+           }
+       }
+       if(asd) break;
+   }
+       }
+   }
    if(is_enemy)
    {
        for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
@@ -86,40 +118,7 @@ void Widget::MoveAll()
 
            //qDebug()<<!eiter->move(height());
    }
-   if(is_enemy){
-       if(shooted){
 
-   for(iter = bullets.begin(); iter != bullets.end(); iter++)
-   {
-       for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
-       {
-           if(iter->getLast()==1)
-           {
-               int a = iter->getPoint().x();
-               int b = iter->getPoint().y();
-               int c = eiter->getPoint().x();
-               int d = eiter->getPoint().y();
-               if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35)) {
-                    //qDebug()
-                   eiter = enemies.erase(eiter);
-                   if(enemies.empty()) {
-                       is_enemy = false;
-                   }
-                   qDebug()<<"a";
-                   iter = bullets.erase(iter);
-                   if(bullets.empty()) shooted = false;
-                   qDebug()<<"b";
-                   asd = true;
-                   break;
-                   qDebug()<<"c";
-               }
-
-           }
-       }
-       if(asd) break;
-   }
-       }
-   }
   // qDebug()<<shooted;
     this->repaint();
 }

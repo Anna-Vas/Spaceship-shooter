@@ -11,11 +11,7 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     player = new Player(width(),height());
-    for(int i = 0; i<3; i++)
-    {
-        enemies.push_back(EnemyType1(width(), height()));
-        is_enemy = true;
-    }
+
     timer.start(30);
     connect(&timer,SIGNAL(timeout()),this,SLOT(MoveAll()));
 }
@@ -41,6 +37,14 @@ void Widget::paintEvent(QPaintEvent *e)
             iter->draw(painter);
         }
     }
+    if(rshooted)
+    {
+        if(!rbullets.empty())
+        for (riter = rbullets.begin(); riter != rbullets.end(); riter++)
+        {
+            riter->draw(painter);
+        }
+    }
 }
 
 void Widget::keyPressEvent(QKeyEvent *k)
@@ -55,9 +59,107 @@ void Widget::keyPressEvent(QKeyEvent *k)
 
 }
 
+void Widget::stage1()
+{
+    for(int i = 0; i<2; i++)
+    {
+        enemies.push_back(EnemyType1(width(), height()));
+        is_enemy = true;
+    }
+}
+
+void Widget::stage2()
+{
+    for(int i = 0; i<3; i++)
+    {
+        enemies.push_back(EnemyType1(width(), height()));
+        is_enemy = true;
+    }
+}
+
+void Widget::stage3()
+{
+    for(int i = 0; i<4; i++)
+    {
+        enemies.push_back(EnemyType1(width(), height()));
+        is_enemy = true;
+    }
+}
+
+void Widget::stage4()
+{
+    for(int i = 0; i<5; i++)
+    {
+        enemies.push_back(EnemyType1(width(), height()));
+        is_enemy = true;
+    }
+}
+
+void Widget::stageBoss()
+{
+    for(int i = 0; i<6; i++)
+    {
+        enemies.push_back(EnemyType1(width(), height()));
+        is_enemy = true;
+    }
+}
+
 
 void Widget::MoveAll()
 {
+   switch (stage) {
+    case 1:
+        if(!is_enemy)
+        {
+            stage1();
+            stage++;
+        }
+        break;
+    case 2:
+        if(!is_enemy)
+        {
+            stage2();
+            stage++;
+        }
+        break;
+    case 3:
+        if(!is_enemy)
+        {
+            stage3();
+            stage++;
+        }
+        break;
+    case 4:
+        if(!is_enemy)
+        {
+            stage4();
+            stage++;
+        }
+        break;
+    case 5:
+        if(!is_enemy)
+        {
+            stageBoss();
+            stage++;
+        }
+        break;
+    default:
+        break;
+    }
+   if(stage>5) stage = 1;
+   if(rshooted)
+   {
+       for (riter = rbullets.begin(); riter != rbullets.end(); riter++)
+       {
+           if(!riter->move(width(),height()))
+           {
+             riter = rbullets.erase(riter);
+             if(rbullets.empty()) rshooted = false;
+             break;
+           }
+
+       }
+   }
    if(shooted){
         for (iter = bullets.begin(); iter != bullets.end(); iter++)
         {
@@ -105,7 +207,12 @@ void Widget::MoveAll()
    }
    if(is_enemy)
    {
-       for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
+       for(eiter = enemies.begin(); eiter != enemies.end(); eiter++){
+           if(rand()%1000<7)
+           {
+               rbullets.push_back(eiter->shoot());
+               rshooted = true;
+           }
            if(!eiter->move(height()))
            {
 
@@ -117,6 +224,7 @@ void Widget::MoveAll()
            }
 
            //qDebug()<<!eiter->move(height());
+   }
    }
 
   // qDebug()<<shooted;

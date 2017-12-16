@@ -6,7 +6,7 @@ class Enemy
 {
 public:
     Enemy(int w,int h);
-    void move(int w,int h);
+    bool move(int h);
     void shoot();
     void draw(QPainter &painter);
     QPoint getPoint();

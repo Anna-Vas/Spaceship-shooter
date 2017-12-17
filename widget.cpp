@@ -19,10 +19,11 @@ Widget::Widget(QWidget *parent) :
     ui->label_2->hide();
     ui->lcdNumber->hide();
     ui->lcdNumber_2->hide();
-
+    ui->label_3->hide();
     ui->pushButton->setStyleSheet("color: red");
     ui->pushButton_2->setStyleSheet("color: black");
     ui->pushButton_3->setStyleSheet("color: black");
+    ui->pushButton_4->hide();
 }
 
 Widget::~Widget()
@@ -145,9 +146,8 @@ void Widget::stage4()
 void Widget::stageBoss()
 {
     if(game_is_started) {
-        timerer.start(200);
+        timerer.start(700);
             connect(&timerer,SIGNAL(timeout()),this,SLOT(moverect()));
-            qDebug()<<"aa";
             Boss = new boss(width(), height());
             boss_exist = true;
     }
@@ -167,6 +167,8 @@ void Widget::switch_choose(QKeyEvent *k)
     case Qt::Key_Space:
         a = true;
         break;
+    case Qt::Key_E:
+        on_pushButton_4_clicked();
     default:
         break;
     }
@@ -235,7 +237,7 @@ void Widget::stop()
         ui->label->hide();
         ui->label_2->hide();
         lives = 5;
-
+        livesStep = 0;
         delete player;
         delete Boss;
         if(!enemies.empty())
@@ -248,15 +250,8 @@ void Widget::stop()
         shooted = false;
         is_enemy = false;
         boss_exist = false;
-
-        QFile file(":/scoreboard.txt");
-        QTextStream out(&file);
-        if(file.open(QIODevice::WriteOnly))
-        {
-            out<<"rr";
-        }
-        file.close();
-       score = 0;
+        if(score>MaxScore) MaxScore = score;
+        score = 0;
     }
 }
 
@@ -439,7 +434,6 @@ void Widget::MoveAll()
                    }
                    if(boss_lives <= 0)
                    {
-                       qDebug()<<"aa";
                        score+=100;
                        boss_exist = false;
                        delete Boss;
@@ -467,7 +461,7 @@ void Widget::on_pushButton_clicked()
     ui->lcdNumber->show();
     ui->lcdNumber_2->show();
     player = new Player(width(),height());
-
+    ui->pushButton_4->hide();
     boss_lives = 20;
     game_is_started = true;
     timer.start(30);
@@ -495,5 +489,23 @@ void Widget::on_pushButton_3_clicked()
     ui->label_2->hide();
     ui->lcdNumber->hide();
     ui->lcdNumber_2->hide();
+    ui->pushButton_4->show();
+    ui->label_3->show();
+    ui->label_3->setText("Best score:"+QString::number(MaxScore));
 }
 
+void Widget::on_pushButton_4_clicked()
+{
+    ui->label->hide();
+    ui->label_2->hide();
+    ui->lcdNumber->hide();
+    ui->lcdNumber_2->hide();
+    ui->label_3->hide();
+    ui->pushButton->show();
+    ui->pushButton_2->show();
+    ui->pushButton_3->show();
+    ui->pushButton->setStyleSheet("color: red");
+    ui->pushButton_2->setStyleSheet("color: black");
+    ui->pushButton_3->setStyleSheet("color: black");
+    ui->pushButton_4->hide();
+}

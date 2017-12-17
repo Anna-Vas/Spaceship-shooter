@@ -15,6 +15,7 @@ private:
     QPoint point;
     int lives;
     int x, y;
+    int n = 0;
 };
 
 #endif // BOSS_H

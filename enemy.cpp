@@ -19,17 +19,23 @@ bool Enemy::move(int h)
 Bullet Enemy::shoot()
 {
     return Bullet(point,2);
+
 }
 
 void Enemy::draw(QPainter &painter)
 {
-    painter.drawImage(point.x(), point.y(), QImage(":/images/player.png").scaled(2*15, 2*15));
+    painter.drawImage(point.x(), point.y(), QImage(":/images/space-invaders-clipart-ship-10.png").scaled(2*15, 2*15));
+}
+
+void Enemy::explode(QPainter &painter) {
+    painter.drawImage(point.x(), point.y(), QImage(":/images/explosion.jpg").scaled(2*15, 2*15));;
 }
 
 QPoint Enemy::getPoint()
 {
     return point;
 }
+
 
 
 

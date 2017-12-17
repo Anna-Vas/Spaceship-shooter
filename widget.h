@@ -38,7 +38,8 @@ public:
 
 public slots:
     void MoveAll();
-    void moverect();
+    bool moverect();
+    void stop();
 private:
     bool is_enemy = false;
     Ui::Widget *ui;
@@ -54,8 +55,16 @@ private:
     int lives = 5;
     int livesStep = 0;
     bool game_is_started = false;
+    int score = 0;
+
 protected:
     bool s = true;
+private slots:
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_lcdNumber_overflow();
+    void on_pushButton_3_clicked();
 };
 
 #endif // WIDGET_H
+

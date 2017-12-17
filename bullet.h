@@ -11,7 +11,7 @@ public:
     QPoint getPoint();
     int getLast();
 private:
-    int v = 10;
+    int v = 7;
     QPoint point;
     int r,last;
 };

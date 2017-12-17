@@ -13,9 +13,6 @@ Widget::Widget(QWidget *parent) :
     player = new Player(width(),height());
     Boss = new boss(width(), height());
     boss_lives = 20;
-    boss_exist = true;
-    timerer.start(1000);
-    connect(&timerer,SIGNAL(timeout()),this,SLOT(moverect()));
     timer.start(30);
     connect(&timer,SIGNAL(timeout()),this,SLOT(MoveAll()));
 }
@@ -36,9 +33,6 @@ void Widget::paintEvent(QPaintEvent *e)
     if(boss_exist)
     {
         Boss->draw(painter);
-            Boss->attack_1(painter);
-            s = false;
-
     }
     if(shooted)
     {
@@ -74,7 +68,7 @@ void Widget::stage1()
 {
     for(int i = 0; i<2; i++)
     {
-        enemies.push_back(EnemyType1(width(), height()));
+        enemies.push_back(EnemyType1(width(), height(),livesStep));
         is_enemy = true;
     }
 }
@@ -83,7 +77,7 @@ void Widget::stage2()
 {
     for(int i = 0; i<3; i++)
     {
-        enemies.push_back(EnemyType1(width(), height()));
+        enemies.push_back(EnemyType1(width(), height(),livesStep));
         is_enemy = true;
     }
 }
@@ -92,7 +86,7 @@ void Widget::stage3()
 {
     for(int i = 0; i<4; i++)
     {
-        enemies.push_back(EnemyType1(width(), height()));
+        enemies.push_back(EnemyType1(width(), height(),livesStep));
         is_enemy = true;
     }
 }
@@ -101,23 +95,23 @@ void Widget::stage4()
 {
     for(int i = 0; i<5; i++)
     {
-        enemies.push_back(EnemyType1(width(), height()));
+        enemies.push_back(EnemyType1(width(), height(),livesStep));
         is_enemy = true;
     }
 }
 
 void Widget::stageBoss()
 {
-    for(int i = 0; i<6; i++)
-    {
-        enemies.push_back(EnemyType1(width(), height()));
-        is_enemy = true;
-    }
+    timerer.start(1000);
+    connect(&timerer,SIGNAL(timeout()),this,SLOT(moverect()));
+    qDebug()<<"aa";
+    boss_exist = true;
 }
 
-bool Widget::moverect()
+void Widget::moverect()
 {
-    bool s = true;
+   rbullets.push_back(Boss->attack_1());
+   qDebug()<<"bb";
 }
 
 
@@ -125,10 +119,16 @@ void Widget::MoveAll()
 {
    switch (stage) {
     case 1:
-        if(!is_enemy)
+
+        if(!is_enemy && !boss_exist)
         {
             stage1();
             stage++;
+            livesStep+=1;
+            qDebug()<<livesStep;
+            timerer.stop();
+            boss_lives = 20 + livesStep;
+
         }
         break;
     case 2:
@@ -155,8 +155,11 @@ void Widget::MoveAll()
     case 5:
         if(!is_enemy)
         {
-            stageBoss();
-            stage++;
+            if(!boss_exist)
+            {
+                stageBoss();
+                stage++;
+            }
         }
         break;
     default:
@@ -174,6 +177,27 @@ void Widget::MoveAll()
              break;
            }
 
+       }
+   }
+   if(rshooted)
+   {
+       for(riter = rbullets.begin();riter!=rbullets.end();riter++)
+       {
+           int a = riter->getPoint().x();
+           int b = riter->getPoint().y();
+           int c = player->getPoint().x();
+           int d = player->getPoint().y();
+         //  qDebug()<<a<<b<<c<<d;
+           if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35)) {
+               lives--;
+               riter = rbullets.erase(riter);
+               if(rbullets.empty()) rshooted = false;
+               break;
+           }
+           if(lives<=0) {
+               game_is_started = false;
+               this->close();
+           }
        }
    }
    if(shooted){
@@ -204,9 +228,13 @@ void Widget::MoveAll()
                int d = eiter->getPoint().y();
              //  qDebug()<<a<<b<<c<<d;
                if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35)) {
-                   eiter = enemies.erase(eiter);
-                   if(enemies.empty()) {
-                       is_enemy = false;
+                   eiter->lives--;
+                   if(eiter->lives<=0)
+                   {
+                       eiter = enemies.erase(eiter);
+                       if(enemies.empty()) {
+                           is_enemy = false;
+                       }
                    }
                //    qDebug()<<"a";
                    iter = bullets.erase(iter);
@@ -252,7 +280,6 @@ void Widget::MoveAll()
                {
                    iter = bullets.erase(iter);
                    boss_lives--;
-                   qDebug()<<"bb";
                    break;
                }
            }
@@ -264,10 +291,11 @@ void Widget::MoveAll()
                break;
            }
        }
-       if(((player->getPoint().x()+20 <= Boss->returnX()+35)and(player->getPoint().x()-20 >= Boss->returnX()-35)) and ((player->getPoint().y()+20 <= Boss->returnY()+35)and(player->getPoint().y()-20 >= Boss->returnY()-35)))
+       /*if(((player->getPoint().x()+20 <= Boss->returnX()+35)and(player->getPoint().x()-20 >= Boss->returnX()-35)) and ((player->getPoint().y()+20 <= Boss->returnY()+35)and(player->getPoint().y()-20 >= Boss->returnY()-35)))
            lives--;
-       else lives = 0;
+       else lives = 0;*/
    }
   // qDebug()<<shooted;
     this->repaint();
 }
+

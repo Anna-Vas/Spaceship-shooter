@@ -8,13 +8,16 @@ public:
     Enemy(int w,int h);
     bool move(int h);
     Bullet shoot();
+    bool is_expld = false;
     void draw(QPainter &painter);
     QPoint getPoint();
-   // bool isCollided();
-protected:
+    void explode(QPainter &painter);
+   
     int lives;
+protected:
     int speed;
     int price;
+
     QPoint point;
    // QPoint b;
 };

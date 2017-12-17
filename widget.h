@@ -38,7 +38,7 @@ public:
 
 public slots:
     void MoveAll();
-    bool moverect();
+    void moverect();
 private:
     bool is_enemy = false;
     Ui::Widget *ui;
@@ -51,7 +51,9 @@ private:
     int stage = 1;
     bool boss_exist = false;
     int boss_lives = 20;
-    int lives;
+    int lives = 5;
+    int livesStep = 0;
+    bool game_is_started = false;
 protected:
     bool s = true;
 };

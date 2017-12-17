@@ -35,7 +35,7 @@ public:
     void stage3();
     void stage4();
     void stageBoss();
-
+    void switch_choose(QKeyEvent *k);
 public slots:
     void MoveAll();
     bool moverect();
@@ -45,7 +45,6 @@ private:
     Ui::Widget *ui;
     QTimer timer;
     QTimer timerer;
-    QTimer pause;
     bool shooted = false;
     bool rshooted = false;
     bool asd = false;
@@ -56,6 +55,9 @@ private:
     int livesStep = 0;
     bool game_is_started = false;
     int score = 0;
+    int choose = 1;
+    bool expld = false;
+    int MaxScore = 0;
 
 protected:
     bool s = true;
@@ -64,7 +66,7 @@ private slots:
     void on_pushButton_2_clicked();
     void on_lcdNumber_overflow();
     void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
 };
 
 #endif // WIDGET_H
-

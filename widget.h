@@ -51,6 +51,7 @@ private:
     int stage = 1;
     bool boss_exist = false;
     int boss_lives = 20;
+    int lives;
 protected:
     bool s = true;
 };

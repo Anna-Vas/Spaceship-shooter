@@ -5,7 +5,7 @@
 class EnemyType1 : public Enemy
 {
 public:
-    EnemyType1(int w, int h);
+    EnemyType1(int w, int h, int livesStep);
 };
 
 #endif // ENEMYTYPE1_H

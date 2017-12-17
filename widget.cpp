@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QList>
 #include <QMessageBox>
+#include <QFile>
+#include <QTextStream>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -18,6 +20,9 @@ Widget::Widget(QWidget *parent) :
     ui->lcdNumber->hide();
     ui->lcdNumber_2->hide();
 
+    ui->pushButton->setStyleSheet("color: red");
+    ui->pushButton_2->setStyleSheet("color: black");
+    ui->pushButton_3->setStyleSheet("color: black");
 }
 
 Widget::~Widget()
@@ -29,8 +34,9 @@ Widget::~Widget()
 void Widget::paintEvent(QPaintEvent *e)
 {
     if(game_is_started) {
-        QPainter painter(this);
+       QPainter painter(this);
             painter.setRenderHint(QPainter::Antialiasing);
+            painter.drawImage(0, 0, QImage(":/images/space.jpg").scaled(width(), height()));
             player->draw(painter);
             for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
                 eiter->draw(painter);
@@ -54,6 +60,25 @@ void Widget::paintEvent(QPaintEvent *e)
                     riter->draw(painter);
                 }
             }
+            //qDebug()<<"b";
+          //  if(expld)
+            //{
+                for(eiter = enemies.begin(); eiter != enemies.end(); eiter++)
+                {
+
+                    if(eiter->is_expld)
+                    {
+                        qDebug()<<"b";
+                        eiter->explode(painter);
+
+
+                        break;
+                    }
+                    break;
+                }
+             //    expld = false;
+           // }
+
     }
 }
 
@@ -68,7 +93,9 @@ void Widget::keyPressEvent(QKeyEvent *k)
             shooted = true;
         }
     }
-
+    else {
+        switch_choose(k);
+    }
 }
 
 void Widget::stage1()
@@ -118,10 +145,65 @@ void Widget::stage4()
 void Widget::stageBoss()
 {
     if(game_is_started) {
-        timerer.start(1000);
+        timerer.start(200);
             connect(&timerer,SIGNAL(timeout()),this,SLOT(moverect()));
             qDebug()<<"aa";
+            Boss = new boss(width(), height());
             boss_exist = true;
+    }
+}
+
+void Widget::switch_choose(QKeyEvent *k)
+{
+    int chosen;
+    bool a = false;
+    switch (k->key()) {
+    case Qt::Key_S:
+        choose++;
+        break;
+    case Qt::Key_W:
+        choose--;
+        break;
+    case Qt::Key_Space:
+        a = true;
+        break;
+    default:
+        break;
+    }
+    if(choose>3) choose = 1;
+    if(choose<1) choose = 3;
+    if(a) chosen = choose;
+    switch (choose) {
+    case 1:
+        ui->pushButton->setStyleSheet("color: red");
+        ui->pushButton_2->setStyleSheet("color: black");
+        ui->pushButton_3->setStyleSheet("color: black");
+        break;
+    case 2:
+        ui->pushButton->setStyleSheet("color: black");
+        ui->pushButton_2->setStyleSheet("color: red");
+        ui->pushButton_3->setStyleSheet("color: black");
+        break;
+    case 3:
+        ui->pushButton->setStyleSheet("color: black");
+        ui->pushButton_2->setStyleSheet("color: black");
+        ui->pushButton_3->setStyleSheet("color: red");
+        break;
+    default:
+        break;
+    }
+    switch (chosen) {
+    case 1:
+        on_pushButton_clicked();
+        break;
+    case 2:
+        on_pushButton_2_clicked();
+        break;
+    case 3:
+        on_pushButton_3_clicked();
+        break;
+    default:
+        break;
     }
 }
 
@@ -144,12 +226,16 @@ void Widget::stop()
         ui->pushButton->show();
         ui->pushButton_2->show();
         ui->pushButton_3->show();
+
+        ui->pushButton->setStyleSheet("color: red");
+        ui->pushButton_2->setStyleSheet("color: black");
+        ui->pushButton_3->setStyleSheet("color: black");
         ui->lcdNumber->hide();
         ui->lcdNumber_2->hide();
         ui->label->hide();
         ui->label_2->hide();
         lives = 5;
-        score = 0;
+
         delete player;
         delete Boss;
         if(!enemies.empty())
@@ -162,6 +248,15 @@ void Widget::stop()
         shooted = false;
         is_enemy = false;
         boss_exist = false;
+
+        QFile file(":/scoreboard.txt");
+        QTextStream out(&file);
+        if(file.open(QIODevice::WriteOnly))
+        {
+            out<<"rr";
+        }
+        file.close();
+       score = 0;
     }
 }
 
@@ -284,7 +379,12 @@ void Widget::MoveAll()
                            eiter->lives--;
                            if(eiter->lives<=0)
                            {
-                               eiter = enemies.erase(eiter);
+                             //  expld = true;
+                             //  eiter->is_expld = true;
+                              // qDebug() << expld;
+
+
+                                eiter = enemies.erase(eiter);
                                score += 10;
                                if(enemies.empty()) {
                                    is_enemy = false;
@@ -367,7 +467,7 @@ void Widget::on_pushButton_clicked()
     ui->lcdNumber->show();
     ui->lcdNumber_2->show();
     player = new Player(width(),height());
-    Boss = new boss(width(), height());
+
     boss_lives = 20;
     game_is_started = true;
     timer.start(30);
@@ -396,3 +496,4 @@ void Widget::on_pushButton_3_clicked()
     ui->lcdNumber->hide();
     ui->lcdNumber_2->hide();
 }
+

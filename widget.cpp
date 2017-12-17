@@ -267,7 +267,6 @@ void Widget::MoveAll()
        if(((player->getPoint().x()+20 <= Boss->returnX()+35)and(player->getPoint().x()-20 >= Boss->returnX()-35)) and ((player->getPoint().y()+20 <= Boss->returnY()+35)and(player->getPoint().y()-20 >= Boss->returnY()-35)))
            lives--;
        else lives = 0;
-       break;
    }
   // qDebug()<<shooted;
     this->repaint();

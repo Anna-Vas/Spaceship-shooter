@@ -1,5 +1,6 @@
 #include "boss.h"
 #include <widget.h>
+#include <bullet.h>
 
 boss::boss(int w, int h)
 {
@@ -16,17 +17,16 @@ int boss::get_lives()
 
 void boss::draw(QPainter &painter)
 {
-    painter.drawImage(point.x()-260, point.y(), QImage(":/images/boos4.png").scaled(2*260, 2*50));
+    painter.drawImage(point.x()-260, point.y(), QImage(":/boos4.png").scaled(2*260, 2*50));
 }
 
-void boss::attack_1(QPainter &painter)
+Bullet boss::attack_1()
 {
-    x = rand()%300;
+    /*x = rand()%300;
     y = rand()%200;
     painter.drawRect(x, y, 70, 70);
     //painter.drawRect(point.x()+100, point.y()+100, 200, 100);
-    painter.setBrush(QBrush(QColor::fromRgb(255, 255, 255)));
+    painter.setBrush(QBrush(QColor::fromRgb(255, 255, 255)));*/
+    return Bullet(point,2);
 
 }
-
-

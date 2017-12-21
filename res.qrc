@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>player.png</file>
+        <file>space-invaders-clipart-ship-10.png</file>
+        <file>boos4.png</file>
+        <file>space.jpg</file>
+    </qresource>
+</RCC>

@@ -392,7 +392,7 @@ void Widget::BonusMovement()
         int b = player->getPoint().y();
         int c = BonusIter->return_point().x();
         int d = BonusIter->return_point().y();
-        if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35))
+        if(((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35)) and (PlayerLives < 5))
         {
             PlayerLives++;
             BonusIter = BonusList.erase(BonusIter);

@@ -48,6 +48,13 @@ void Widget::paintEvent(QPaintEvent *e)
         {
             FinalBoss->draw(painter);
         }
+        if(IsBonus)
+        {
+            for(BonusIter = BonusList.begin();BonusIter != BonusList.end();BonusIter++)
+            {
+                BonusIter->draw(painter);
+            }
+        }
     }
 }
 
@@ -104,6 +111,8 @@ void Widget::Gameloop()
     if(EnemyShooted) PlayerDamage();
     if(IsEnemy && PlayerShooted) EnemiesDamage();
     if(BossIsAlive && PlayerShooted) BossDamage();
+    if(rand()%100<5) SpawnBonus();
+    if(IsBonus) BonusMovement();
     DisplayGameStats();
     if(PlayerLives<=0) EndGame();
     this->repaint();
@@ -376,6 +385,25 @@ void Widget::SwitchStage()
     }
 }
 
+void Widget::SpawnBonus()
+{
+    BonusList.push_back(bonus(width(),height()));
+    IsBonus = true;
+}
+
+void Widget::BonusMovement()
+{
+    for(BonusIter = BonusList.begin();BonusIter != BonusList.end();BonusIter++)
+    {
+        if(!BonusIter->move(height()))
+        {
+            BonusIter = BonusList.erase(BonusIter);
+            if(BonusList.empty()) IsBonus = false;
+            break;
+        }
+    }
+}
+
 void Widget::stage1()
 {
     for(int i = 0;i<3;i++)
@@ -430,6 +458,7 @@ void Widget::EndGame()
     PlayerShooted = false;
     EnemyShooted = false;
     IsEnemy = false;
+    IsBonus = false;
     if(PlayerScore > MaxScore) MaxScore = PlayerScore;
     LoadMainScreen();
 }

@@ -8,6 +8,7 @@
 #include <enemy.h>
 #include <enemytype1.h>
 #include <boss.h>
+#include <bonus.h>
 
 namespace Ui {
 class Widget;
@@ -27,6 +28,9 @@ class Widget : public QWidget
     //
     QList<Bullet> RedBullets;
     QList<Bullet>::iterator RedBulletsIter;
+    //
+    QList<bonus> BonusList;
+    QList<bonus>::iterator BonusIter;
 
 public:
     explicit Widget(QWidget *parent = 0);
@@ -48,6 +52,8 @@ public:
     void PlayerDamage();
     void DisplayGameStats();
     void SwitchStage();
+    void SpawnBonus();
+    void BonusMovement();
     void stage1();
     void stage2();
     void stage3();
@@ -82,6 +88,8 @@ private:
     int LivesStep = 0;
     bool BossIsAlive = false;
     int MaxScore = 0;
+    bool IsBonus = false;
 };
 
 #endif // WIDGET_H
+

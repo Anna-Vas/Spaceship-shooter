@@ -23,7 +23,7 @@ void Widget::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
     if(GameIsStarted)
     {
-        painter.drawImage(0,0, QImage(":/img/space.jpg").scaled(width(), height()));
+        painter.drawImage(0,0, QImage(":/images/space.jpg").scaled(width(), height()));
         player->draw(painter);
         if(PlayerShooted)
         {
@@ -238,7 +238,7 @@ void Widget::EnemiesMovement()
         {
             EnemiesIter = EnemiesList.erase(EnemiesIter);
             if(EnemiesList.empty())
-            {    
+            {
                 IsEnemy = false;
 
             }
@@ -385,12 +385,6 @@ void Widget::SwitchStage()
     }
 }
 
-void Widget::SpawnBonus()
-{
-    BonusList.push_back(bonus(width(),height()));
-    IsBonus = true;
-}
-
 void Widget::BonusMovement()
 {
     for(BonusIter = BonusList.begin();BonusIter != BonusList.end();BonusIter++)
@@ -409,8 +403,11 @@ void Widget::stage1()
     for(int i = 0;i<3;i++)
     {
         EnemiesList.push_back(EnemyType1(width(),height(),LivesStep));
+
     }
+    BonusList.push_back(bonus(width(),height()));
     IsEnemy = true;
+    IsBonus = true;
 }
 
 void Widget::stage2()
@@ -419,6 +416,8 @@ void Widget::stage2()
     {
         EnemiesList.push_back(EnemyType1(width(),height(),LivesStep));
     }
+    BonusList.push_back(bonus(width(),height()));
+    IsBonus = true;
     IsEnemy = true;
 }
 
@@ -428,6 +427,8 @@ void Widget::stage3()
     {
         EnemiesList.push_back(EnemyType1(width(),height(),LivesStep));
     }
+    BonusList.push_back(bonus(width(),height()));
+    IsBonus = true;
     IsEnemy = true;
 }
 
@@ -437,6 +438,8 @@ void Widget::stage4()
     {
         EnemiesList.push_back(EnemyType1(width(),height(),LivesStep));
     }
+    BonusList.push_back(bonus(width(),height()));
+    IsBonus = true;
     IsEnemy = true;
 }
 
@@ -446,6 +449,8 @@ void Widget::stageBoss()
    FinalBoss = new boss(width(),height());
    connect(&BossAttackTimer,SIGNAL(timeout()),this,SLOT(BossAttack()));
    BossIsAlive = true;
+   BonusList.push_back(bonus(width(),height()));
+   IsBonus = true;
 }
 
 void Widget::EndGame()

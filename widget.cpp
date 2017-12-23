@@ -111,7 +111,6 @@ void Widget::Gameloop()
     if(EnemyShooted) PlayerDamage();
     if(IsEnemy && PlayerShooted) EnemiesDamage();
     if(BossIsAlive && PlayerShooted) BossDamage();
-    if(rand()%100<5) SpawnBonus();
     if(IsBonus) BonusMovement();
     DisplayGameStats();
     if(PlayerLives<=0) EndGame();
@@ -389,6 +388,17 @@ void Widget::BonusMovement()
 {
     for(BonusIter = BonusList.begin();BonusIter != BonusList.end();BonusIter++)
     {
+        int a = player->getPoint().x();
+        int b = player->getPoint().y();
+        int c = BonusIter->return_point().x();
+        int d = BonusIter->return_point().y();
+        if((a - c)*(a - c)+(b - d)*(b - d) <= (35)*(35))
+        {
+            PlayerLives++;
+            BonusIter = BonusList.erase(BonusIter);
+            IsBonus = false;
+            break;
+        }
         if(!BonusIter->move(height()))
         {
             BonusIter = BonusList.erase(BonusIter);

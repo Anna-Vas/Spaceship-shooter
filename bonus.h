@@ -11,7 +11,7 @@ public:
     QPoint return_point();
 public:
     QPoint point;
-    int v = 15;
+    int v = 10;
 };
 
 #endif // BONUS_H

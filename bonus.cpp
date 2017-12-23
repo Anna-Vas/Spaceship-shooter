@@ -9,7 +9,7 @@ bonus::bonus(int w, int h)
 bool bonus::move(int h)
 {
     point+=QPoint(0,v);
-    if(point.y()+2*15>=h)
+    if(point.y()+15>=h)
         return false;
     return true;
 }

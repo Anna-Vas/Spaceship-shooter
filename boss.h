@@ -7,7 +7,7 @@
 class boss
 {
 public:
-    boss(int w, int h);
+    boss(int w, int h, int livesStep);
     int get_lives();
     void draw(QPainter &painter);
     void BossMinusLives();

@@ -1,17 +1,22 @@
-#ifndef BONUS_H
-#define BONUS_H
+#ifndef BOSS_H
+#define BOSS_H
 #include <QtGui>
+#include <QTimer>
+#include <bullet.h>
 
-class bonus
+class boss
 {
 public:
-    bonus(int w, int h);
-    bool move(int h);
+    boss(int w, int h, int livesStep);
+    int get_lives();
     void draw(QPainter &painter);
-    QPoint return_point();
-public:
+    void BossMinusLives();
+    Bullet attack_1();
+private:
     QPoint point;
-    int v = 10;
+    int lives;
+    int x, y;
+    int n = 0;
 };
 
-#endif // BONUS_H
+#endif // BOSS_H

@@ -314,6 +314,7 @@ void Widget::BossDamage()
                 BossAttackTimer.stop();
                 disconnect(&BossAttackTimer,SIGNAL(timeout()),this,SLOT(BossAttack()));
                 PlayerScore+=100;
+
             }
             GreenIter = GreenBulletsList.erase(GreenIter);
             if(GreenBulletsList.empty())
@@ -455,8 +456,8 @@ void Widget::stage4()
 
 void Widget::stageBoss()
 {
-   BossAttackTimer.start(600);
-   FinalBoss = new boss(width(),height());
+   BossAttackTimer.start(800);
+   FinalBoss = new boss(width(),height(), LivesStep);
    connect(&BossAttackTimer,SIGNAL(timeout()),this,SLOT(BossAttack()));
    BossIsAlive = true;
    BonusList.push_back(bonus(width(),height()));
@@ -499,3 +500,4 @@ void Widget::on_BackButton_clicked()
 {
      LoadMainScreen();
 }
+
